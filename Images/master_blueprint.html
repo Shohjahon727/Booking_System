@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mehmonxona Bron Qilish Tizimi - Master Blueprint</title>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --card-bg: #131d32;
+      --card-border: #1e293b;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 13px;
+      line-height: 1.4;
+      padding: 16px;
+      overflow-x: hidden;
+      width: 2560px;
+    }
+
+    /* Top Global Header */
+    .global-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 12px 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 800;
+      color: #38bdf8;
+      letter-spacing: -0.5px;
+    }
+    .brand-logo svg { width: 28px; height: 28px; fill: #38bdf8; }
+    .brand-subtitle {
+      background: #1e293b;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .header-center {
+      flex: 1;
+      max-width: 600px;
+      margin: 0 40px;
+    }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 8px 14px;
+      gap: 10px;
+      color: #94a3b8;
+    }
+    .search-bar input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 13px;
+      width: 100%;
+    }
+    .kbd-shortcut {
+      background: #334155;
+      color: #cbd5e1;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .icon-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+    .badge-count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #ef4444;
+      color: #fff;
+      font-size: 10px;
+      font-weight: bold;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #1e293b;
+      padding: 4px 12px 4px 6px;
+      border-radius: 24px;
+      border: 1px solid #334155;
+    }
+    .user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #3b82f6;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 12px;
+    }
+    .user-info { display: flex; flex-direction: column; }
+    .user-name { font-weight: 600; font-size: 12px; color: #f1f5f9; }
+    .user-role { font-size: 10px; color: #38bdf8; font-weight: 700; }
+
+    /* Layout: Sidebar + Main Content */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 16px;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .nav-group-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+    .nav-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      color: #cbd5e1;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .nav-item.active {
+      background: #2563eb;
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .nav-item:hover:not(.active) {
+      background: #1e293b;
+      color: #f8fafc;
+    }
+    .sidebar-footer-card {
+      margin-top: auto;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .sidebar-footer-card h4 { font-size: 12px; margin-bottom: 4px; color: #38bdf8; }
+    .sidebar-footer-card p { font-size: 11px; color: #94a3b8; margin-bottom: 10px; }
+    .btn-support {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    /* Main Bento Grid */
+    .bento-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .bento-row {
+      display: grid;
+      gap: 16px;
+    }
+    .row-user { grid-template-columns: 1.1fr 1fr 1fr; }
+    .row-booking { grid-template-columns: 1.2fr 0.8fr 1fr; }
+    .row-partner { grid-template-columns: 1fr 1fr 1fr; }
+    .row-admin { grid-template-columns: 1fr 1.3fr 1.3fr 1.4fr; }
+
+    /* Bento Card */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      position: relative;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 8px;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: #1e293b;
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+
+    /* 01. Bosh Sahifa */
+    .hero-search-box {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr auto;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .search-input-group label {
+      display: block;
+      font-size: 10px;
+      color: #94a3b8;
+      margin-bottom: 2px;
+    }
+    .search-input-group input, .search-input-group select {
+      width: 100%;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #fff;
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+    .btn-search {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .hotel-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .hotel-mini-card {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .hotel-mini-img {
+      height: 75px;
+      background: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #475569;
+      font-size: 10px;
+      position: relative;
+    }
+    .hotel-mini-img img { width: 100%; height: 100%; object-fit: cover; }
+    .hotel-mini-body { padding: 8px; }
+    .hotel-mini-title { font-weight: 700; font-size: 11px; color: #fff; margin-bottom: 2px; }
+    .hotel-mini-loc { font-size: 10px; color: #94a3b8; margin-bottom: 4px; }
+    .hotel-mini-footer { display: flex; justify-content: space-between; align-items: center; }
+    .rating-badge { color: #f59e0b; font-size: 10px; font-weight: bold; }
+    .price-text { font-weight: 700; color: #38bdf8; font-size: 11px; }
+
+    /* 02. Mehmonxona Detali */
+    .detail-verified {
+      color: #10b981;
+      font-size: 14px;
+      margin-left: 4px;
+    }
+    .detail-gallery {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 6px;
+      height: 110px;
+      margin-bottom: 10px;
+    }
+    .gallery-main {
+      border-radius: 6px;
+      background: linear-gradient(135deg, #1e3a8a, #0f172a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #93c5fd;
+      font-weight: bold;
+      font-size: 11px;
+    }
+    .gallery-thumbs {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .gallery-thumb {
+      flex: 1;
+      border-radius: 4px;
+      background: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      font-size: 10px;
+      position: relative;
+    }
+    .gallery-more-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #38bdf8;
+      font-weight: bold;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .amenities-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .amenity-chip {
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      color: #cbd5e1;
+    }
+
+    /* 03. Xonalarni Tanlash */
+    .rooms-list { display: flex; flex-direction: column; gap: 6px; }
+    .room-row {
+      display: grid;
+      grid-template-columns: 70px 1fr auto auto;
+      gap: 10px;
+      align-items: center;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      padding: 6px 10px;
+    }
+    .room-thumb {
+      height: 44px;
+      background: #1e293b;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: #64748b;
+    }
+    .room-info h5 { font-size: 11px; color: #fff; margin-bottom: 2px; }
+    .room-specs { font-size: 10px; color: #94a3b8; }
+    .room-price { font-weight: 700; color: #38bdf8; font-size: 11px; text-align: right; }
+    .btn-select {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* 04. Smart Bron Qilish & Kalkulyator */
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .checkout-form { display: flex; flex-direction: column; gap: 8px; }
+    .form-group label { display: block; font-size: 10px; color: #94a3b8; margin-bottom: 2px; }
+    .form-group input {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #fff;
+      padding: 5px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+    .addons-checklist {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      padding: 8px;
+    }
+    .addon-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+    .addon-item input { margin-right: 6px; }
+    .calc-box {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 10px;
+    }
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #cbd5e1;
+      margin-bottom: 4px;
+    }
+    .calc-row.total {
+      border-top: 1px solid #334155;
+      padding-top: 6px;
+      margin-top: 6px;
+      font-weight: 800;
+      font-size: 13px;
+      color: #10b981;
+    }
+    .btn-confirm {
+      width: 100%;
+      background: #10b981;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 12px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    /* 05. Bron Holati */
+    .booking-cards-list { display: flex; flex-direction: column; gap: 6px; }
+    .status-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .status-confirmed { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; }
+    .status-pending { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid #f59e0b; }
+    .status-completed { background: rgba(59, 130, 246, 0.2); color: #3b82f6; border: 1px solid #3b82f6; }
+    .status-cancelled { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
+
+    /* 06. Taqvim (Calendar) */
+    .calendar-table { width: 100%; border-collapse: collapse; font-size: 10px; }
+    .calendar-table th, .calendar-table td {
+      border: 1px solid #1e293b;
+      padding: 5px;
+      text-align: center;
+    }
+    .calendar-table th { background: #0f172a; color: #94a3b8; }
+    .cal-bar {
+      border-radius: 3px;
+      padding: 2px 4px;
+      font-size: 9px;
+      font-weight: bold;
+      color: #fff;
+    }
+    .bar-booked { background: #ef4444; }
+    .bar-pending { background: #f59e0b; }
+    .bar-available { background: #10b981; }
+
+    /* Tables */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; }
+    .data-table th, .data-table td { padding: 6px 8px; border-bottom: 1px solid #1e293b; }
+    .data-table th { background: #0f172a; color: #94a3b8; font-weight: 600; font-size: 10px; }
+    .data-table tr:hover { background: #1a253c; }
+
+    /* Charts & KPI */
+    .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px; }
+    .kpi-card {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      padding: 8px;
+      text-align: center;
+    }
+    .kpi-title { font-size: 10px; color: #94a3b8; }
+    .kpi-value { font-size: 14px; font-weight: 800; color: #38bdf8; }
+
+    /* Bottom Trust & Tech Footer */
+    .master-footer {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 14px 24px;
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 1.5fr 1.5fr 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+    .trust-features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .trust-item { display: flex; align-items: center; gap: 8px; }
+    .trust-icon { font-size: 18px; }
+    .trust-text h5 { font-size: 11px; color: #fff; }
+    .trust-text p { font-size: 9px; color: #94a3b8; }
+    .tech-stack-row { display: flex; align-items: center; gap: 8px; }
+    .tech-badge {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      color: #cbd5e1;
+    }
+    .payments-row { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+    .pay-badge {
+      background: #fff;
+      color: #0f172a;
+      font-weight: 800;
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. GLOBAL HEADER -->
+  <header class="global-header">
+    <div class="header-left">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24"><path d="M19 2H9c-1.1 0-2 .9-2 2v3H5c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h10v16H9V4zM5 9h2v11H5V9zm6 2h2v2h-2v-2zm0 4h2v2h-2v-2zm4-4h2v2h-2v-2zm0 4h2v2h-2v-2z"/></svg>
+        StayBook
+      </div>
+      <span class="brand-subtitle">MEHMONXONA BRON QILISH TIZIMI — MASTER BLUEPRINT (3 TA ROL)</span>
+    </div>
+
+    <div class="header-center">
+      <div class="search-bar">
+        <span>🔍</span>
+        <input type="text" placeholder="Qidirish... mehmonxona, shahar yoki hudud nomi" value="Toshkent, Grand Plaza Hotel">
+        <span class="kbd-shortcut">Ctrl /</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="icon-btn" title="Mavzu: Qorong'i / Yorug'">🌙</div>
+      <div class="icon-btn" title="Bildirishnomalar">
+        🔔
+        <span class="badge-count">5</span>
+      </div>
+      <div class="icon-btn" style="width: auto; padding: 0 10px; font-weight: bold; font-size: 11px;">
+        🇺🇿 UZ ▾
+      </div>
+      <div class="user-pill">
+        <div class="user-avatar">AN</div>
+        <div class="user-info">
+          <span class="user-name">Alisher Normatov</span>
+          <span class="user-role">SUPER ADMIN</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- APP LAYOUT -->
+  <div class="app-layout">
+
+    <!-- 2. UNIFIED SIDEBAR -->
+    <aside class="sidebar">
+      <div>
+        <div class="nav-group-title">MEHMON (USER)</div>
+        <ul class="nav-list">
+          <li class="nav-item">🏠 Bosh sahifa</li>
+          <li class="nav-item">🔍 Qidirish & Filtrlar</li>
+          <li class="nav-item">📅 Bron qilish</li>
+          <li class="nav-item">📋 Mening bronlarim</li>
+          <li class="nav-item">❤️ Sevimlilar (Wishlist)</li>
+          <li class="nav-item">👤 Profil</li>
+          <li class="nav-item">💬 Xabarlar (Chat)</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="nav-group-title">HOTEL EGASI (PARTNER)</div>
+        <ul class="nav-list">
+          <li class="nav-item">🏨 My Hotel</li>
+          <li class="nav-item">🛏️ Xonalarim</li>
+          <li class="nav-item">📑 Bronlar</li>
+          <li class="nav-item">📆 Xonalar Taqvimi</li>
+          <li class="nav-item">⭐ Sharhlar & Reyting</li>
+          <li class="nav-item">📊 Statistika</li>
+          <li class="nav-item">⚙️ Sozlamalar</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="nav-group-title">ADMIN (MA'MURIYAT)</div>
+        <ul class="nav-list">
+          <li class="nav-item active">📊 Admin Dashboard</li>
+          <li class="nav-item">🏨 Mehmonxonalar</li>
+          <li class="nav-item">🛏️ Barcha Xonalar</li>
+          <li class="nav-item">📑 Bronlar Nazorati</li>
+          <li class="nav-item">👥 Foydalanuvchilar</li>
+          <li class="nav-item">📈 Moliyaviy Statistika</li>
+        </ul>
+      </div>
+
+      <div class="sidebar-footer-card">
+        <h4>Yordam kerakmi?</h4>
+        <p>24/7 qo'llab-quvvatlash xizmati</p>
+        <button class="btn-support">Biz bilan bog'laning</button>
+        <div style="font-size: 9px; color: #64748b; margin-top: 8px;">© 2025 HotelBook.uz</div>
+      </div>
+    </aside>
+
+    <!-- 3. CENTRAL BENTO GRID -->
+    <main class="bento-container">
+
+      <!-- SECTION ROW 1: USER DISCOVERY -->
+      <div class="bento-row row-user">
+        
+        <!-- 01. Bosh Sahifa -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">01. Bosh Sahifa (Qidiruv & Vitrina)</span>
+            <span class="card-badge">Mehmon</span>
+          </div>
+          <div class="hero-search-box">
+            <div class="search-input-group">
+              <label>Qayerga?</label>
+              <input type="text" value="Toshkent shahri">
+            </div>
+            <div class="search-input-group">
+              <label>Kirish sanasi</label>
+              <input type="text" value="13.05.2025">
+            </div>
+            <div class="search-input-group">
+              <label>Chiqish sanasi</label>
+              <input type="text" value="15.05.2025">
+            </div>
+            <div class="search-input-group">
+              <label>Mehmonlar</label>
+              <input type="text" value="2 mehmon">
+            </div>
+            <button class="btn-search">Qidirish</button>
+          </div>
+          <div class="hotel-cards-grid">
+            <div class="hotel-mini-card">
+              <div class="hotel-mini-img" style="background:#1e3a8a;">Grand Plaza</div>
+              <div class="hotel-mini-body">
+                <div class="hotel-mini-title">Grand Plaza Hotel</div>
+                <div class="hotel-mini-loc">Toshkent, Mirobod</div>
+                <div class="hotel-mini-footer">
+                  <span class="rating-badge">★ 4.6 (120)</span>
+                  <span class="price-text">750k so'm</span>
+                </div>
+              </div>
+            </div>
+            <div class="hotel-mini-card">
+              <div class="hotel-mini-img" style="background:#0f766e;">City Palace</div>
+              <div class="hotel-mini-body">
+                <div class="hotel-mini-title">City Palace Hotel</div>
+                <div class="hotel-mini-loc">Toshkent, Markaz</div>
+                <div class="hotel-mini-footer">
+                  <span class="rating-badge">★ 4.8 (98)</span>
+                  <span class="price-text">650k so'm</span>
+                </div>
+              </div>
+            </div>
+            <div class="hotel-mini-card">
+              <div class="hotel-mini-img" style="background:#701a75;">Comfort Inn</div>
+              <div class="hotel-mini-body">
+                <div class="hotel-mini-title">Comfort Inn</div>
+                <div class="hotel-mini-loc">Samarqand, Registon</div>
+                <div class="hotel-mini-footer">
+                  <span class="rating-badge">★ 4.5 (76)</span>
+                  <span class="price-text">550k so'm</span>
+                </div>
+              </div>
+            </div>
+            <div class="hotel-mini-card">
+              <div class="hotel-mini-img" style="background:#c2410c;">Registan Hotel</div>
+              <div class="hotel-mini-body">
+                <div class="hotel-mini-title">Registan Hotel</div>
+                <div class="hotel-mini-loc">Samarqand, Markaz</div>
+                <div class="hotel-mini-footer">
+                  <span class="rating-badge">★ 4.7 (103)</span>
+                  <span class="price-text">620k so'm</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 02. Mehmonxona Detali -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">02. Mehmonxona Detali <span class="detail-verified">✔️ Verified</span></span>
+            <span class="card-badge">Grand Plaza Hotel</span>
+          </div>
+          <div class="detail-gallery">
+            <div class="gallery-main">Asosiy Rasm (Hero)</div>
+            <div class="gallery-thumbs">
+              <div class="gallery-thumb">Foto 1</div>
+              <div class="gallery-thumb">Foto 2</div>
+            </div>
+            <div class="gallery-thumbs">
+              <div class="gallery-thumb">Foto 3</div>
+              <div class="gallery-thumb">
+                <div class="gallery-more-overlay">+12 Rasm</div>
+              </div>
+            </div>
+          </div>
+          <div class="amenities-list">
+            <span class="amenity-chip">📶 Wi-Fi</span>
+            <span class="amenity-chip">🏊 Pool</span>
+            <span class="amenity-chip">🅿️ Parking</span>
+            <span class="amenity-chip">🍽️ Restoran</span>
+            <span class="amenity-chip">💆 Spa</span>
+            <span class="amenity-chip">🏋️ Fitness</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 6px 10px; border-radius: 6px;">
+            <div>
+              <span style="font-size: 10px; color: #94a3b8;">Boshlang'ich narx:</span>
+              <div style="font-weight: 800; color: #38bdf8; font-size: 12px;">750 000 so'm / kecha</div>
+            </div>
+            <button class="btn-select" style="padding: 6px 14px;">Xonalarni ko'rish</button>
+          </div>
+        </div>
+
+        <!-- 03. Xonalarni Tanlash -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">03. Xonalarni Tanlash (4 toifa)</span>
+            <span class="card-badge">Mavjud</span>
+          </div>
+          <div class="rooms-list">
+            <div class="room-row">
+              <div class="room-thumb">Deluxe</div>
+              <div class="room-info">
+                <h5>Deluxe Room</h5>
+                <div class="room-specs">28 m² • 1 karavot • 2 kishi</div>
+              </div>
+              <div class="room-price">900 000 so'm</div>
+              <button class="btn-select">Tanlash</button>
+            </div>
+            <div class="room-row">
+              <div class="room-thumb">Suite</div>
+              <div class="room-info">
+                <h5>Suite Room</h5>
+                <div class="room-specs">38 m² • 1 katta karavot • 2 kishi</div>
+              </div>
+              <div class="room-price">1 300 000 so'm</div>
+              <button class="btn-select">Tanlash</button>
+            </div>
+            <div class="room-row">
+              <div class="room-thumb">Standard</div>
+              <div class="room-info">
+                <h5>Standard Room</h5>
+                <div class="room-specs">22 m² • 2 alohida karavot • 2 kishi</div>
+              </div>
+              <div class="room-price">650 000 so'm</div>
+              <button class="btn-select">Tanlash</button>
+            </div>
+            <div class="room-row">
+              <div class="room-thumb">Twin</div>
+              <div class="room-info">
+                <h5>Deluxe Twin Room</h5>
+                <div class="room-specs">32 m² • 2 alohida karavot • 2 kishi</div>
+              </div>
+              <div class="room-price">850 000 so'm</div>
+              <button class="btn-select">Tanlash</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SECTION ROW 2: BOOKING FLOW & CALENDAR -->
+      <div class="bento-row row-booking">
+        
+        <!-- 04. Smart Bron Qilish & Kalkulyator -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">04. Smart Bron Qilish & Kalkulyator</span>
+            <span class="card-badge">2 kecha • 2 mehmon</span>
+          </div>
+          <div class="checkout-grid">
+            <div class="checkout-form">
+              <div class="form-group">
+                <label>To'liq ism</label>
+                <input type="text" value="Alisher Normatov">
+              </div>
+              <div class="form-group">
+                <label>Telefon raqam</label>
+                <input type="text" value="+998 90 123 45 67">
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="text" value="alisher@mail.com">
+              </div>
+              <div class="addons-checklist">
+                <div style="font-size: 10px; font-weight: bold; color: #94a3b8; margin-bottom: 4px;">QO'SHIMCHA XIZMATLAR:</div>
+                <div class="addon-item">
+                  <label><input type="checkbox" checked> Nonushta (2 kecha)</label>
+                  <span>+300 000 so'm</span>
+                </div>
+                <div class="addon-item">
+                  <label><input type="checkbox" checked> Transfer (Aeroport)</label>
+                  <span>+120 000 so'm</span>
+                </div>
+                <div class="addon-item">
+                  <label><input type="checkbox" checked> Spa kompleks xizmati</label>
+                  <span>+200 000 so'm</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="calc-box">
+                <div style="font-size: 10px; font-weight: bold; color: #94a3b8; margin-bottom: 6px;">HISOB-KITOB (ANIQ):</div>
+                <div class="calc-row">
+                  <span>Xona narxi (2 kecha × 900 000):</span>
+                  <span>1 800 000 so'm</span>
+                </div>
+                <div class="calc-row">
+                  <span>Nonushta (2 kishi):</span>
+                  <span>300 000 so'm</span>
+                </div>
+                <div class="calc-row">
+                  <span>Soliq va servis xizmati:</span>
+                  <span>150 000 so'm</span>
+                </div>
+                <div class="calc-row total">
+                  <span>JAMI TO'LOV:</span>
+                  <span>2 250 000 so'm</span>
+                </div>
+              </div>
+              <button class="btn-confirm">Bronni Tasdiqlash va To'lash</button>
+              <div style="text-align: center; font-size: 10px; color: #94a3b8; margin-top: 6px;">
+                💳 To'lov: Payme, Click, Karta yoki joyida to'lash
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 05. Bron Holati (Mening Bronlarim) -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">05. Mening Bronlarim Holati</span>
+            <span class="card-badge">Barchasi (4)</span>
+          </div>
+          <div class="booking-cards-list">
+            <div style="background:#0f172a; padding:8px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-weight: bold; color: #fff;">Grand Plaza Hotel</div>
+                <div style="font-size: 10px; color: #94a3b8;">13.05 - 15.05.2025 • Deluxe Room</div>
+              </div>
+              <span class="status-badge status-confirmed">Confirmed</span>
+            </div>
+            <div style="background:#0f172a; padding:8px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-weight: bold; color: #fff;">City Palace Hotel</div>
+                <div style="font-size: 10px; color: #94a3b8;">20.05 - 21.05.2025 • Suite Room</div>
+              </div>
+              <span class="status-badge status-pending">Pending</span>
+            </div>
+            <div style="background:#0f172a; padding:8px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-weight: bold; color: #fff;">Comfort Inn</div>
+                <div style="font-size: 10px; color: #94a3b8;">01.05 - 03.05.2025 • Standard</div>
+              </div>
+              <span class="status-badge status-completed">Completed</span>
+            </div>
+            <div style="background:#0f172a; padding:8px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-weight: bold; color: #fff;">Registan Hotel</div>
+                <div style="font-size: 10px; color: #94a3b8;">10.05 - 11.05.2025 • Suite Room</div>
+              </div>
+              <span class="status-badge status-cancelled">Cancelled</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 06. Xonalar Taqvimi (Hotel Egasi) -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">06. Xonalar Taqvimi (Hotel Egasi)</span>
+            <div style="display: flex; gap: 4px;">
+              <span class="card-badge" style="background:#2563eb; color:#fff;">Oy</span>
+              <span class="card-badge">Hafta</span>
+              <span class="card-badge">Bugun</span>
+            </div>
+          </div>
+          <table class="calendar-table">
+            <thead>
+              <tr>
+                <th>Xona</th>
+                <th>Du 12</th>
+                <th>Se 13</th>
+                <th>Ch 14</th>
+                <th>Pa 15</th>
+                <th>Ju 16</th>
+                <th>Sha 17</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:bold; color:#fff;">Deluxe</td>
+                <td><span class="cal-bar bar-available">Mavjud</span></td>
+                <td colspan="3"><span class="cal-bar bar-booked" style="display:block;">Alisher N. (Band)</span></td>
+                <td><span class="cal-bar bar-available">Mavjud</span></td>
+                <td><span class="cal-bar bar-pending">Kutilmoqda</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:bold; color:#fff;">Suite</td>
+                <td colspan="2"><span class="cal-bar bar-booked" style="display:block;">Diyorbek S.</span></td>
+                <td><span class="cal-bar bar-available">Mavjud</span></td>
+                <td><span class="cal-bar bar-available">Mavjud</span></td>
+                <td colspan="2"><span class="cal-bar bar-booked" style="display:block;">John Smith</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:bold; color:#fff;">Standard</td>
+                <td><span class="cal-bar bar-available">Mavjud</span></td>
+                <td><span class="cal-bar bar-available">Mavjud</span></td>
+                <td colspan="2"><span class="cal-bar bar-pending" style="display:block;">Bobo M.</span></td>
+                <td><span class="cal-bar bar-available">Mavjud</span></td>
+                <td><span class="cal-bar bar-available">Mavjud</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="display: flex; gap: 12px; margin-top: 8px; font-size: 9px; justify-content: center;">
+            <span><b style="color:#ef4444;">■</b> Band (Booked)</span>
+            <span><b style="color:#f59e0b;">■</b> Kutilmoqda (Pending)</span>
+            <span><b style="color:#10b981;">■</b> Mavjud (Available)</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SECTION ROW 3: PARTNER MANAGEMENT & ANALYTICS -->
+      <div class="bento-row row-partner">
+        
+        <!-- 07. Bronlarni Boshqarish -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">07. Bronlarni Boshqarish (Hotel Egasi)</span>
+            <button class="btn-select" style="background:#10b981;">+ Bron qo'shish</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Mehmon</th>
+                <th>Xona</th>
+                <th>Muddat</th>
+                <th>Jami</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Alisher Normatov</b></td>
+                <td>Deluxe</td>
+                <td>13.05 - 15.05</td>
+                <td>2 250 000</td>
+                <td><span class="status-badge status-confirmed">Confirmed</span></td>
+              </tr>
+              <tr>
+                <td><b>Diyorbek Sodiqov</b></td>
+                <td>Suite</td>
+                <td>18.05 - 20.05</td>
+                <td>1 450 000</td>
+                <td><span class="status-badge status-pending">Pending</span></td>
+              </tr>
+              <tr>
+                <td><b>John Smith</b></td>
+                <td>Standard</td>
+                <td>10.05 - 12.05</td>
+                <td>1 100 000</td>
+                <td><span class="status-badge status-completed">Completed</span></td>
+              </tr>
+              <tr>
+                <td><b>Bobo Mirzo</b></td>
+                <td>Deluxe</td>
+                <td>01.05 - 02.05</td>
+                <td>900 000</td>
+                <td><span class="status-badge status-cancelled">Cancelled</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 08. Sharhlar (Hotel Egasi) -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">08. Sharhlar va Reyting</span>
+            <span class="rating-badge" style="font-size:12px;">★ 4.6 (120 ta baho)</span>
+          </div>
+          <div style="background:#0f172a; padding:8px; border-radius:6px; margin-bottom:8px;">
+            <div style="font-size:10px; display:flex; justify-content:space-between; margin-bottom:2px;">
+              <span>5 yulduz</span><span style="color:#10b981;">80 ta (66%)</span>
+            </div>
+            <div style="height:4px; background:#1e293b; border-radius:2px; overflow:hidden;">
+              <div style="width:66%; height:100%; background:#10b981;"></div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <div style="background:#0f172a; padding:6px; border-radius:4px;">
+              <div style="display:flex; justify-content:space-between; font-size:10px;">
+                <b>Alisher Normatov</b> <span style="color:#f59e0b;">★★★★★</span>
+              </div>
+              <div style="font-size:10px; color:#cbd5e1;">Ajoyib xizmat va toza xona. Albatta yana kelaman!</div>
+            </div>
+            <div style="background:#0f172a; padding:6px; border-radius:4px;">
+              <div style="display:flex; justify-content:space-between; font-size:10px;">
+                <b>John Smith</b> <span style="color:#f59e0b;">★★★★★</span>
+              </div>
+              <div style="font-size:10px; color:#cbd5e1;">Eng yaxshi xizmat ko'rsatish va qulay joylashuv!</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 09. Statistika (Hotel Egasi) -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">09. Mehmonxona Statistikasi</span>
+            <span class="card-badge">May 2025</span>
+          </div>
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-title">Jami bron</div>
+              <div class="kpi-value">128</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Mehmonlar</div>
+              <div class="kpi-value">256</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Bandlik</div>
+              <div class="kpi-value" style="color:#10b981;">68%</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Daromad</div>
+              <div class="kpi-value" style="font-size:11px;">24.5M so'm</div>
+            </div>
+          </div>
+          <!-- SVG Line Graph Mock -->
+          <div style="background:#0f172a; padding:8px; border-radius:6px; text-align:center;">
+            <div style="font-size:10px; color:#94a3b8; margin-bottom:4px; text-align:left;">Daromad o'sish dinamikasi (oylik)</div>
+            <svg viewBox="0 0 300 60" style="width:100%; height:60px;">
+              <polyline fill="none" stroke="#38bdf8" stroke-width="2" points="0,50 40,40 80,45 120,30 160,35 200,20 240,25 280,10 300,15" />
+              <circle cx="280" cy="10" r="3" fill="#10b981" />
+            </svg>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SECTION ROW 4: ADMIN MODULES (10, 11, 12, 13) -->
+      <div class="bento-row row-admin">
+        
+        <!-- 10. Admin Dashboard -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">10. Admin Dashboard</span>
+            <span class="card-badge" style="background:#ef4444; color:#fff;">Global</span>
+          </div>
+          <div class="kpi-row" style="grid-template-columns: 1fr 1fr;">
+            <div class="kpi-card">
+              <div class="kpi-title">Mehmonxonalar</div>
+              <div class="kpi-value">156</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Foydalanuvchilar</div>
+              <div class="kpi-value">1 856</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Jami bronlar</div>
+              <div class="kpi-value">3 412</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Umumiy aylanma</div>
+              <div class="kpi-value" style="font-size:11px; color:#10b981;">125.4M</div>
+            </div>
+          </div>
+          <div style="font-size:10px; color:#94a3b8; text-align:center; padding:4px;">Platforma oylik daromadi +34% o'sishda</div>
+        </div>
+
+        <!-- 11. Mehmonxonalar (Admin) -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">11. Mehmonxonalar Nazorati</span>
+            <button class="btn-select">+ Yangi qo'shish</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Mehmonxona</th>
+                <th>Shahar</th>
+                <th>Xonalar</th>
+                <th>Reyting</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Grand Plaza</td>
+                <td>Toshkent</td>
+                <td>45</td>
+                <td>★ 4.6</td>
+                <td><span class="status-badge status-confirmed">Active</span></td>
+              </tr>
+              <tr>
+                <td>City Palace</td>
+                <td>Toshkent</td>
+                <td>30</td>
+                <td>★ 4.8</td>
+                <td><span class="status-badge status-confirmed">Active</span></td>
+              </tr>
+              <tr>
+                <td>Comfort Inn</td>
+                <td>Samarqand</td>
+                <td>25</td>
+                <td>★ 4.5</td>
+                <td><span class="status-badge status-confirmed">Active</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 12. Xonalar (Admin) -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">12. Xonalar Boshqaruvi</span>
+            <button class="btn-select">+ Xona qo'shish</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Xona nomi</th>
+                <th>Mehmonxona</th>
+                <th>Turi</th>
+                <th>Narxi</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Deluxe 101</td>
+                <td>Grand Plaza</td>
+                <td>Deluxe</td>
+                <td>900 000</td>
+                <td><span class="status-badge status-confirmed">Active</span></td>
+              </tr>
+              <tr>
+                <td>Suite 201</td>
+                <td>Grand Plaza</td>
+                <td>Suite</td>
+                <td>1 300 000</td>
+                <td><span class="status-badge status-confirmed">Active</span></td>
+              </tr>
+              <tr>
+                <td>Twin 302</td>
+                <td>City Palace</td>
+                <td>Twin</td>
+                <td>850 000</td>
+                <td><span class="status-badge status-confirmed">Active</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 13. Foydalanuvchilar (Admin) -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">13. Foydalanuvchilar & Rollar</span>
+            <span class="card-badge">Jami 1 856</span>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Foydalanuvchi</th>
+                <th>Email</th>
+                <th>Roli</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Alisher Normatov</b></td>
+                <td>alisher@mail.com</td>
+                <td><span style="color:#ef4444; font-weight:bold;">Admin</span></td>
+                <td><span class="status-badge status-confirmed">Active</span></td>
+              </tr>
+              <tr>
+                <td><b>Grand Hotel Owner</b></td>
+                <td>owner1@mail.com</td>
+                <td><span style="color:#f59e0b; font-weight:bold;">Hotel</span></td>
+                <td><span class="status-badge status-confirmed">Active</span></td>
+              </tr>
+              <tr>
+                <td><b>Diyorbek T.</b></td>
+                <td>diyorbek@mail.com</td>
+                <td><span style="color:#38bdf8; font-weight:bold;">User</span></td>
+                <td><span class="status-badge status-confirmed">Active</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- 4. MASTER FOOTER: TRUST & TECH STACK & PAYMENTS -->
+  <footer class="master-footer">
+    <div class="trust-features">
+      <div class="trust-item">
+        <span class="trust-icon">🏷️</span>
+        <div class="trust-text">
+          <h5>Eng yaxshi narxlar</h5>
+          <p>Kafolatlangan qulay narx</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon">🔒</span>
+        <div class="trust-text">
+          <h5>Xavfsiz to'lov</h5>
+          <p>100% himoyalangan tizim</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon">📞</span>
+        <div class="trust-text">
+          <h5>24/7 Qo'llab-quvvatlash</h5>
+          <p>Doimiy yordam markazi</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon">⚡</span>
+        <div class="trust-text">
+          <h5>Oson bron qilish</h5>
+          <p>Bir necha soniyada</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tech-stack-row">
+      <span style="font-size:11px; font-weight:bold; color:#94a3b8;">TEXNOLOGIYA:</span>
+      <span class="tech-badge" style="border-color:#38bdf8; color:#38bdf8; font-weight:bold;">.NET 10 Web API</span>
+      <span class="tech-badge">Next.js (Frontend)</span>
+      <span class="tech-badge">PostgreSQL</span>
+      <span class="tech-badge">Docker & Redis</span>
+      <span class="tech-badge">JWT Auth</span>
+    </div>
+
+    <div class="payments-row">
+      <span style="font-size:11px; font-weight:bold; color:#94a3b8; margin-right:4px;">TO'LOV:</span>
+      <span class="pay-badge" style="background:#00c8b3; color:#fff;">payme</span>
+      <span class="pay-badge" style="background:#007aff; color:#fff;">CLICK</span>
+      <span class="pay-badge" style="background:#1e3a8a; color:#fff;">uzcard</span>
+      <span class="pay-badge" style="background:#d97706; color:#fff;">HUMO</span>
+      <span class="pay-badge" style="background:#1d4ed8; color:#fff;">VISA</span>
+      <span class="pay-badge" style="background:#dc2626; color:#fff;">Mastercard</span>
+    </div>
+  </footer>
+
+</body>
+</html>

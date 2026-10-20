@@ -1,0 +1,78 @@
+## .NET Core and Visual Studio
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+.vs/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.docstates
+
+## Rider & VS Code
+.idea/
+.vscode/
+*.swp
+*~
+
+## Build & Test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.vspscc
+*.vssscc
+.builds
+
+## Environment & Secrets
+.env
+.env.*
+!.env.example
+appsettings*.local.json
+appsettings.Production.json
+
+## Docker & DB Volumes
+docker-data/
+*.db
+*.sqlite
+*.sqlite3
+
+## Frontend & Node
+node_modules/
+dist/
+.next/
+out/
+build/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+## OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
