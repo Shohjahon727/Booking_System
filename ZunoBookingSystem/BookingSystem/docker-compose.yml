@@ -3,9 +3,11 @@ services:
     image: postgres:17-alpine
     container_name: staybook_postgres
     environment:
-      POSTGRES_DB: staybook_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgrespassword
+  POSTGRES_DB: BookingDb
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready -U postgres -d BookingDb"]
     ports:
       - "5432:5432"
     volumes:

@@ -49,6 +49,7 @@
 .env.*
 !.env.example
 appsettings*.local.json
+appsettings.Development.json
 appsettings.Production.json
 
 ## Docker & DB Volumes
