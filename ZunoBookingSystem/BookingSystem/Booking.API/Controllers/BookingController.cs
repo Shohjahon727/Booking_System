@@ -25,7 +25,7 @@ namespace Booking.API.Controllers
 
 		[Authorize]
 		[HttpGet]
-		public async Task<IActionResult> GetBooking()
+		public async Task<IActionResult> GetBooking(CancellationToken ct)
 		{
 			var userIdValue = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			var role = User.FindFirstValue(ClaimTypes.Role);
@@ -33,22 +33,21 @@ namespace Booking.API.Controllers
 			if (!Guid.TryParse(userIdValue, out var userId))
 				return Unauthorized("Invalid user token");
 
-			var query =  _context.Bookings.AsNoTracking().AsQueryable();
+			if (string.IsNullOrWhiteSpace(role))
+				return Unauthorized("Invalid role");
 
-			query = role switch
+			var result = await _service.GetListAsyc(userId, role, ct);
+
+			if (!result.Success)
 			{
-				"Admin" => query,
-				"User" => query.Where(x => x.UserId == userId),
-				"Hotel" => query.Where(x => x.Room.Hotel.UserId == userId),
-				_ => null
-			};
+				return result.StatusCode switch
+				{
+					403 => Forbid(),
+					_ => StatusCode(result.StatusCode, new { Message = result.Error })
+				};
+			}
 
-			if (query == null)
-				return Forbid();
-
-			var booking = await query.OrderByDescending(x => x.CreatedAt).ToListAsync();
-
-			return Ok(booking);
+			return Ok(result.Data);
 		}
 
 		[Authorize]
@@ -61,24 +60,22 @@ namespace Booking.API.Controllers
 			if (!Guid.TryParse(userIdValue, out var userId))
 				return Unauthorized();
 
-			
-			var booking = await _context.Bookings.FirstOrDefaultAsync(x => x.Id == id);
-			if (booking == null) return NotFound("Booking not found.");
+			if (string.IsNullOrWhiteSpace(role))
+				return Unauthorized("Invalid role");
 
-			var isAuthorized = role switch
+			var result = await _service.GetByIdAsync(userId, id, role, ct);
+
+			if (!result.Success)
 			{
-				"Admin" => true,
-				"User" => booking.UserId == userId,
-				"Hotel" => await _context.Bookings.AnyAsync(b => b.Id == id && b.Room.Hotel.UserId == userId, ct),
-				_ => false
-			};
+				return result.StatusCode switch
+				{
+					403 => Forbid(),
+					404 => NotFound(new { Message = result.Error }),
+					_ => StatusCode(result.StatusCode, new { Message = result.Error })
+				};
+			}
 
-			if (!isAuthorized)
-				return Forbid();
-
-
-
-			return Ok(booking);
+			return Ok(result.Data);
 		}
 
 		[Authorize(Roles = "User")]
@@ -118,35 +115,24 @@ namespace Booking.API.Controllers
 			if (!Guid.TryParse(userIdValue, out var userId))
 				return Unauthorized("Invalid token user");
 
-			var booking = await _context.Bookings.FirstOrDefaultAsync(b => b.Id == id);
+			if (string.IsNullOrWhiteSpace(role))
+				return Unauthorized("Invalid role");
 
-			if (booking is null) return NotFound("Booking not found");
-
-			if (role == "Hotel")
+			var result = await _service.ConfirmAsync(userId, id, role, ct);
+			
+			if (!result.Success)
 			{
-				var ownsBooking = await _context.Bookings.AnyAsync(b => b.Id == id && b.Room.Hotel.UserId == userId,ct);
-
-				if (!ownsBooking)
-					return Forbid();
+				return result.StatusCode switch
+				{
+					400 => BadRequest(new { Message = result.Error }),
+					403 => Forbid(),
+					404 => NotFound(new { Message = result.Error }),
+					409 => Conflict(new { Message = result.Error }),
+					_ => StatusCode(result.StatusCode, new { Message = result.Error })
+				};
 			}
 
-			if (booking.Status != BookingStatus.Pending) 
-				return BadRequest("Only pending bookings can be confirmed.");
-
-			booking.Status = BookingStatus.Confirmed;
-			booking.UpdatedAt = DateTime.UtcNow;
-
-			await _context.SaveChangesAsync(ct);
-
-			var result = new
-			{
-				Message = "Booking confirmed successfully.",
-				BookingId = booking.Id,
-				booking.Status,
-				booking.UpdatedAt
-			};
-
-			return Ok(result);
+			return Ok(result.Data);
 
 		}
 
@@ -159,50 +145,54 @@ namespace Booking.API.Controllers
 
 			if (!Guid.TryParse(userIdValue, out var userId))
 				return Unauthorized("Invalid token user");
-			var booking = await _context.Bookings.FirstOrDefaultAsync(b => b.Id == id);
 
-			if (booking is null) return NotFound("Booking not found.");
+			if (string.IsNullOrWhiteSpace(role))
+				return Unauthorized("Invalid role");
 
-			var isAuthorized = role switch
+			var result = await _service.CancelAsync(userId, id, role, ct);
+
+			if (!result.Success)
 			{
-				"Admin" => true,
-				"User" => booking.UserId == userId,
-				"Hotel" => await _context.Bookings.AnyAsync(b => b.Id == id && b.Room.Hotel.UserId == userId, ct),
-				_ => false
-			};
+				return result.StatusCode switch
+				{
+					400 => BadRequest(new { Message = result.Error }),
+					403 => Forbid(),
+					404 => NotFound(new { Message = result.Error }),
+					409 => Conflict(new { Message = result.Error }),
+					_ => StatusCode(result.StatusCode, new { Message = result.Error })
+				};
+			}
 
-			if (!isAuthorized)
-				return Forbid();
-
-			if (booking.Status != BookingStatus.Confirmed && booking.Status != BookingStatus.Pending)
-				return BadRequest("Only pending or confirmed bookings can be cancelled.");
-
-			booking.Status = BookingStatus.Cancelled;
-			booking.UpdatedAt = DateTime.UtcNow;
-
-			await _context.SaveChangesAsync(ct);
-
-			var result = new {
-				Message = "Booking canceled successfully.",
-				BookingId = booking.Id,
-				booking.Status,
-				booking.UpdatedAt
-			};
-
-			return Ok(result);
+			return Ok(result.Data);
 		}
 
 		[Authorize(Roles = "Admin,Hotel")]
 		[HttpDelete("{id}")]
-		public async Task<IActionResult> Delete(Guid id)
+		public async Task<IActionResult> Delete(Guid id , CancellationToken ct)
 		{
-			var booking = await _context.Bookings.FirstOrDefaultAsync(x => x.Id == id);
-			if (booking == null) return NotFound();
+			var userIdValue = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var role = User.FindFirstValue(ClaimTypes.Role);
 
-			_context.Bookings.Remove(booking);
-			await _context.SaveChangesAsync();
+			if (!Guid.TryParse(userIdValue, out var userId))
+				return Unauthorized("Invalid token user");
 
-			return Ok(booking);
+			if (string.IsNullOrWhiteSpace(role))
+				return Unauthorized("Invalid role");
+			var result = await _service.DeleteAsync(userId,id, role,ct);
+
+			if (!result.Success)
+			{
+				return result.StatusCode switch
+				{
+					400 => BadRequest(new { Message = result.Error }),
+					403 => Forbid(),
+					404 => NotFound(new { Message = result.Error }),
+					409 => Conflict(new { Message = result.Error }),
+					_ => StatusCode(result.StatusCode, new { Message = result.Error })
+				};
+			}
+
+			return Ok(result.Data);
 		}
 	}
 }
